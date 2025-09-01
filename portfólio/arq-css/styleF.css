@@ -1,0 +1,58 @@
+.about-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* agora ocupa toda a área da foto */
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start; /* para preencher de cima pra baixo */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.digit {
+  color: #00eeff;
+  font-family: monospace;
+  font-size: clamp(12px, 2vw, 20px);
+  opacity: 0.15;
+  animation: matrix-fall 2s infinite;
+  margin: 2px; /* um pequeno espaçamento */
+}
+
+.about-content,
+.section-header {
+  position: relative;
+  z-index: 1; /* garante que foto e texto ficam acima */
+}
+
+
+    .digit:nth-child(1) { animation-delay: 0.1s; }
+    .digit:nth-child(2) { animation-delay: 0.3s; }
+    .digit:nth-child(3) { animation-delay: 0.5s; }
+    .digit:nth-child(4) { animation-delay: 0.7s; }
+    .digit:nth-child(5) { animation-delay: 0.9s; }
+    .digit:nth-child(6) { animation-delay: 0.1s; }
+    .digit:nth-child(7) { animation-delay: 0.3s; }
+    .digit:nth-child(8) { animation-delay: 0.5s; }
+
+    @keyframes matrix-fall {
+      0% {
+        transform: translateY(-50px) rotateX(90deg);
+        opacity: 0;
+      }
+      20%, 80% {
+        transform: translateY(0) rotateX(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(50px) rotateX(-90deg);
+        opacity: 0;
+      }
+    }
+
