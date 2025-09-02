@@ -12,9 +12,12 @@ Este é o meu portfólio pessoal, criado para apresentar meus projetos, habilida
 - `index.html` → página principal
 - `css/` → estilos
 - `js/` → scripts
-- `assets/` → imagens, ícones
+- `imgs/` → imagens, ícones
 
 ## 💻 Como visualizar
 1. Clone este repositório:
    ```bash
    git clone https://github.com/Keven-W/Keven-portf-lio.git
+
+## 📸 Demonstração   
+![Demonstração do portfólio](assets/demo.gif)
