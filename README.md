@@ -10,7 +10,7 @@ Este é o meu portfólio pessoal, criado para apresentar meus projetos, habilida
 
 ## 📂 Estrutura do projeto
 - `index.html` → página principal
-- `css/` → estilos
+- `arq-css/` → estilos
 - `js/` → scripts
 - `imgs/` → imagens, ícones
 
