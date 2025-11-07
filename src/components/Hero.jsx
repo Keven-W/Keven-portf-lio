@@ -88,7 +88,7 @@ const Hero = () => {
               className="text-5xl md:text-7xl font-bold mb-4"
             >
               <span className="text-white">Keven</span>{' '}
-              <span className="text-green-500">Wendell</span>
+              <span className="text-green-500">W.</span>
             </motion.h1>
 
             <motion.div
