@@ -51,4 +51,4 @@ O projeto apresenta meus **principais trabalhos, habilidades e projetos em desen
 
 ## 🌎 Créditos
 
-Desenvolvido com 💙 por **Keven Wendell da Silva Souza**
+Desenvolvido   por **Keven Wendell.**
