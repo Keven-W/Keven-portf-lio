@@ -1,11 +1,28 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Mail, MapPin, Linkedin, Github, Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Estado do formulário
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('');
+
+ 
+  const SERVICE_ID = 'service_is0kxkg'; 
+  const TEMPLATE_ID = 'template_e6j2kcp';
+  const PUBLIC_KEY = 'KZ27pE54nvCYsxg86';
+
+  
 
   const contactInfo = [
     {
@@ -53,6 +70,43 @@ const Contact = () => {
       opacity: 1,
       y: 0,
       transition: { duration: 0.5 }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setSubmitStatus('');
+
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_email: 'keven.w.1107@gmail.com'
+        },
+        PUBLIC_KEY
+      );
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+
+    } catch (error) {
+      console.error('Erro ao enviar:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -135,7 +189,20 @@ const Contact = () => {
               <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-lg border border-gray-700">
                 <h3 className="text-xl font-bold text-white mb-6">Envie uma mensagem</h3>
 
-                <form className="space-y-6">
+                {/* Mensagens de status */}
+                {submitStatus === 'success' && (
+                  <div className="mb-4 p-3 bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-sm">
+                    ✅ Mensagem enviada com sucesso!
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-sm">
+                    ❌ Erro ao enviar mensagem. Tente novamente.
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-gray-400 text-sm mb-2">
                       Nome
@@ -143,8 +210,11 @@ const Contact = () => {
                     <input
                       type="text"
                       id="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors"
                       placeholder="Seu nome"
+                      required
                     />
                   </div>
 
@@ -155,8 +225,11 @@ const Contact = () => {
                     <input
                       type="email"
                       id="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors"
                       placeholder="seu@email.com"
+                      required
                     />
                   </div>
 
@@ -167,8 +240,11 @@ const Contact = () => {
                     <textarea
                       id="message"
                       rows="5"
+                      value={formData.message}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors resize-none"
                       placeholder="Sua mensagem..."
+                      required
                     ></textarea>
                   </div>
 
@@ -176,16 +252,25 @@ const Contact = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/50"
+                    disabled={isLoading}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send size={20} />
-                    Enviar Mensagem
+                    {isLoading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={20} />
+                        Enviar Mensagem
+                      </>
+                    )}
                   </motion.button>
                 </form>
 
                 <p className="text-gray-500 text-sm mt-6 text-center">
-                  (no momento não fiz integração com emailJS então as informações acima não chegam até mim)  <br></br> 
-                  me envie um email diretamente: {' '}
+                  Agora o formulário está funcionando! Você também pode me enviar um email diretamente: {' '}
                   <a href="mailto:keven.w.1107@gmail.com" className="text-green-500 hover:underline">
                     keven.w.1107@gmail.com
                   </a>

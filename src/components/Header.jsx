@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,7 +16,7 @@ const Header = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {b 
+    const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
       const sections = navItems.map(item => item.id);
@@ -74,6 +74,7 @@ const Header = () => {
             <span className="text-green-500">.</span>
           </motion.div>
 
+          {/* Menu Desktop */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
               <motion.button
@@ -99,37 +100,47 @@ const Header = () => {
             ))}
           </div>
 
+          {/* Botão Menu Mobile */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white hover:text-green-500 transition-colors"
+            className="md:hidden text-white hover:text-green-500 transition-colors z-60"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mt-4 pb-4"
-          >
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left py-3 px-4 rounded-lg transition-colors ${
-                  activeSection === item.id
-                    ? 'bg-green-500/20 text-green-500'
-                    : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </motion.div>
-        )}
+        {/* Menu Mobile */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden absolute left-0 right-0 top-full bg-black/95 backdrop-blur-sm shadow-lg border-t border-gray-800"
+            >
+              <div className="container mx-auto px-6 py-4">
+                {navItems.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block w-full text-left py-4 px-4 rounded-lg transition-all duration-300 border-l-2 ${
+                      activeSection === item.id
+                        ? 'bg-green-500/10 text-green-500 border-green-500'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white border-transparent'
+                    }`}
+                  >
+                    {item.label}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </motion.header>
   );
