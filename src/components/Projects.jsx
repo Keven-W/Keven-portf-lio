@@ -13,7 +13,7 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'Website para Clínica Odontológica',
+      title: 'Website para laboratório de protése dentária',
       description: 'Sistema completo para gestão de clínica odontológica com agendamento online, cadastro de pacientes e área administrativa.',
       technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
       status: 'in-progress',
@@ -83,7 +83,7 @@ const Projects = () => {
             </h2>
             <div className="w-20 h-1 bg-green-500 mx-auto rounded-full"></div>
             <p className="text-gray-400 mt-6 max-w-2xl mx-auto">
-              Alguns dos projetos que desenvolvi durante minha jornada como desenvolvedor
+              Alguns dos projetos que desenvolvi durante minha jornada como programador em formação.
             </p>
           </motion.div>
 
