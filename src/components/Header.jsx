@@ -62,20 +62,20 @@ const Header = () => {
         isScrolled ? 'bg-black/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
       }`}
     >
-      <nav className="container mx-auto px-6 py-4">
+      <nav className="container mx-auto px-4 sm:px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-bold"
+            className="text-xl sm:text-2xl font-bold"
           >
             <span className="text-white">Portfólio</span>
             <span className="text-green-500">.</span>
           </motion.div>
 
           {/* Menu Desktop */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             {navItems.map((item, index) => (
               <motion.button
                 key={item.id}
@@ -103,10 +103,10 @@ const Header = () => {
           {/* Botão Menu Mobile */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white hover:text-green-500 transition-colors z-60"
+            className="md:hidden text-white hover:text-green-500 transition-colors z-50"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
@@ -118,9 +118,9 @@ const Header = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden absolute left-0 right-0 top-full bg-black/95 backdrop-blur-sm shadow-lg border-t border-gray-800"
+              className="md:hidden absolute left-0 right-0 top-full bg-black/98 backdrop-blur-lg shadow-xl border-t border-gray-700 z-40"
             >
-              <div className="container mx-auto px-6 py-4">
+              <div className="container mx-auto px-4 py-3">
                 {navItems.map((item, index) => (
                   <motion.button
                     key={item.id}
@@ -128,10 +128,10 @@ const Header = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => scrollToSection(item.id)}
-                    className={`block w-full text-left py-4 px-4 rounded-lg transition-all duration-300 border-l-2 ${
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 border-l-2 mb-2 ${
                       activeSection === item.id
-                        ? 'bg-green-500/10 text-green-500 border-green-500'
-                        : 'text-gray-300 hover:bg-white/5 hover:text-white border-transparent'
+                        ? 'bg-green-500/20 text-green-500 border-green-500'
+                        : 'text-gray-300 hover:bg-white/10 hover:text-white border-transparent'
                     }`}
                   >
                     {item.label}
