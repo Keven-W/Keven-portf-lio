@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/Keven-portf-lio/', // nome exato do repositório
   plugins: [react()],
+  base: '/Keven-portf-lio/', // ← IMPORTA NTÍSSIMO! Para GitHub Pages
 })
