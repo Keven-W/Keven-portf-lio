@@ -1,14 +1,14 @@
 import React from 'react';
-import Header from './components/Header.jsx';
-import Hero from './components/Hero.jsx';
-import About from './components/About.jsx';
-import Skills from './components/Skills.jsx';
-import Projects from './components/Projects.jsx';
-import Contact from './components/Contact.jsx';
-import Footer from './components/Footer.jsx';
+import Maintenance from './Maintenance';
 import './index.css';
 
 function App() {
+  // Temporariamente mostrando apenas a tela de manutenção
+  return <Maintenance />;
+  
+  // Quando quiser voltar ao normal, comente a linha acima
+  // e descomente abaixo:
+  /*
   return (
     <div className="App">
       <Header />
@@ -20,6 +20,7 @@ function App() {
       <Footer />
     </div>
   );
+  */
 }
 
 export default App;

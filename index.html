@@ -4,14 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Keven Wendell - Desenvolvedor Full Stack em formação. Estudante de Ciência da Computação em busca de oportunidades de estágio." />
-    <meta name="keywords" content="desenvolvedor, full stack, react, javascript, portfólio, keven wendell" />
-    <meta name="author" content="Keven Wendell" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="public/logoP.ico"/>
-    <title>Keven W.| Desenvolvedor Full Stack</title>
+    <title>Keven Mendell - Portfólio em Manutenção</title>
+    <!-- Tailwind CSS via CDN (garantido que funciona) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Animações extras */
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
