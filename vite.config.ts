@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Keven-porf-lio/', // ALTERE COM O NOME DO SEU REPOSITÓRIO
+  base: '/Keven-porf-lio/', 
 });
