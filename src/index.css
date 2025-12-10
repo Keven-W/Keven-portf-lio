@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Corrige problemas comuns de responsividade */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Remove linha branca em telas muito largas */
+@media (min-width: 1920px) {
+  .max-w-7xl {
+    max-width: 1280px;
+  }
+}
+
+/* Melhora responsividade em telas muito pequenas */
+@media (max-width: 360px) {
+  .text-4xl {
+    font-size: 2rem;
+  }
+}
