@@ -12,16 +12,19 @@ const BinaryBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Configurações - mais visível e rápido
-    const fontSize = 16; // Tamanho normal
-    const columnWidth = 20; // Mais denso
-    let speed = 1.2; // Mais rápido
+    // Configurações ajustadas - mais lento mas visível
+    const fontSize = 16;
+    const columnWidth = 24; // Mais espaçado
+    let speed = 0.6; // Mais lento
     let lastTime = 0;
-    const interval = 33; // 30 FPS (mais suave)
+    const interval = 50; // 20 FPS (mais suave e lento)
 
     const initCanvas = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      
+      const width = parent.clientWidth;
+      const height = parent.clientHeight;
       
       // Ajustar para high DPI displays
       const dpr = window.devicePixelRatio || 1;
@@ -36,7 +39,7 @@ const BinaryBackground = () => {
       const columns = Math.floor(width / columnWidth);
       dropsRef.current = new Array(columns);
       for (let i = 0; i < columns; i++) {
-        dropsRef.current[i] = Math.random() * -50;
+        dropsRef.current[i] = Math.random() * -100; // Começar mais acima
       }
     };
 
@@ -48,34 +51,53 @@ const BinaryBackground = () => {
       }
       lastTime = timestamp;
 
-      const width = canvas.width / (window.devicePixelRatio || 1);
-      const height = canvas.height / (window.devicePixelRatio || 1);
+      const parent = canvas.parentElement;
+      if (!parent) return;
       
-      // Fundo com opacidade para efeito de rastro (mais visível)
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Aumentada
+      const width = parent.clientWidth;
+      const height = parent.clientHeight;
+      
+      // Fundo com opacidade para efeito de rastro suave
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; // Rastro mais duradouro
       ctx.fillRect(0, 0, width, height);
 
-      // Texto binário com cor mais visível
-      ctx.fillStyle = 'rgba(212, 175, 55, 0.25)'; // Mais opaco
-      ctx.font = `${fontSize}px "Courier New", monospace`;
+      // Texto binário com cor suave e visível
+      ctx.fillStyle = 'rgba(212, 175, 55, 0.15)'; // Mais suave
+      ctx.font = `bold ${fontSize}px "Courier New", monospace`;
+      ctx.textAlign = 'center';
 
       const drops = dropsRef.current;
       
       for (let i = 0; i < drops.length; i++) {
-        // Mais frequência de mudança (rápido)
+        // Texto binário aleatório
         const text = Math.random() > 0.5 ? '1' : '0';
-        const x = i * columnWidth;
+        const x = i * columnWidth + columnWidth / 2; // Centralizado na coluna
         const y = drops[i];
         
+        // Desenhar o caractere
         ctx.fillText(text, x, y);
         
-        // Mover para baixo MAIS RÁPIDO
-        drops[i] += speed;
+        // Mover para baixo com velocidade variável
+        const dropSpeed = speed * (0.8 + Math.random() * 0.4);
+        drops[i] += dropSpeed;
         
         // Reiniciar se sair da tela
-        if (drops[i] > height + 50) {
-          drops[i] = Math.random() * -20;
+        if (drops[i] > height + 100) {
+          drops[i] = Math.random() * -50;
         }
+        
+        // Ocasionalmente resetar uma gota aleatória
+        if (Math.random() < 0.001) {
+          drops[i] = Math.random() * -50;
+        }
+      }
+
+      // Desenhar algumas partículas especiais
+      if (Math.random() < 0.03) {
+        const specialX = Math.random() * width;
+        const specialY = Math.random() * height;
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
+        ctx.fillText('1', specialX, specialY);
       }
 
       animationRef.current = requestAnimationFrame(draw);
@@ -86,10 +108,24 @@ const BinaryBackground = () => {
       animationRef.current = requestAnimationFrame(draw);
     };
 
-    // Iniciar
+    // Iniciar animação
     startAnimation();
 
-    // Redimensionamento
+    // Observar redimensionamento do container
+    const resizeObserver = new ResizeObserver(() => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      initCanvas();
+      animationRef.current = requestAnimationFrame(draw);
+    });
+
+    const parent = canvas.parentElement;
+    if (parent) {
+      resizeObserver.observe(parent);
+    }
+
+    // Redimensionamento da janela
     const handleResize = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -105,6 +141,9 @@ const BinaryBackground = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      if (parent) {
+        resizeObserver.unobserve(parent);
+      }
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -112,7 +151,7 @@ const BinaryBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full opacity-30 pointer-events-none"
+      className="binary-canvas"
       aria-hidden="true"
     />
   );

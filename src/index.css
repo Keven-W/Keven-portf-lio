@@ -34,16 +34,21 @@ body {
   padding-top: 80px;
 }
 
-/* ===== CANVAS - MAIS VISÍVEL ===== */
-canvas {
-  position: fixed !important;
+/* ===== CANVAS - APENAS DENTRO DA HERO ===== */
+#hero canvas.binary-canvas {
+  position: absolute !important;
   top: 0 !important;
   left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
+  height: 100% !important;
   z-index: 0 !important;
   pointer-events: none;
-  opacity: 0.4 !important; /* Aumentada a opacidade */
+  opacity: 0.35 !important;
+}
+
+/* IMPORTANTE: Remover canvas global do body */
+body > canvas {
+  display: none !important;
 }
 
 /* ===== HERO SECTION ===== */
@@ -55,25 +60,26 @@ canvas {
   justify-content: center;
   background-color: #000;
   overflow: hidden;
+  isolation: isolate; /* Contém efeitos dentro da hero */
 }
 
-/* Overlay mais claro para deixar o efeito mais visível */
+/* Overlay para melhor contraste */
 #hero .overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.7) 0%, /* Mais claro */
-    rgba(0, 0, 0, 0.8) 50%,
-    rgba(0, 0, 0, 0.9) 100%
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.8) 100%
   );
   z-index: 1;
 }
 
 /* ===== CONTEÚDO DO HERO ===== */
-#hero > div:last-child {
+.hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 20;
 }
 
 /* ===== RESPONSIVIDADE ===== */
@@ -82,9 +88,8 @@ canvas {
     padding-top: 70px;
   }
   
-  /* Ajuste para canvas no mobile */
-  canvas {
-    opacity: 0.35 !important;
+  #hero canvas.binary-canvas {
+    opacity: 0.25 !important;
   }
 }
 
@@ -99,16 +104,11 @@ html {
   }
 }
 
-canvas {
-  border: 2px solid red !important;
-}
 /* ===== MELHORIAS PARA CONTRASTE DO TEXTO ===== */
-/* Adiciona sombra de texto para melhor legibilidade */
 .text-shadow {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Para textos que ficam sobre o efeito binário */
 .over-text {
   position: relative;
   z-index: 30;
@@ -124,38 +124,19 @@ canvas {
   display: inline-block;
 }
 
-/* ===== OVERLAY DO HERO REAJUSTADO ===== */
-#hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    circle at center,
-    transparent 0%,
-    rgba(0, 0, 0, 0.3) 40%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* ===== CONTEÚDO DO HERO (DEVE FICAR ACIMA DO OVERLAY) ===== */
-#hero > div:last-child {
-  position: relative;
-  z-index: 20;
-}
-
-/* ===== AJUSTE DO CANVAS ===== */
-canvas {
-  position: fixed !important;
+/* ===== AJUSTE DO CANVAS (APENAS HERO) ===== */
+#hero .binary-canvas {
+  position: absolute !important;
   top: 0 !important;
   left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
+  height: 100% !important;
   z-index: 0 !important;
   pointer-events: none;
   opacity: 0.35 !important;
+}
+
+/* ===== REMOVER EFEITOS DE OUTRAS SEÇÕES ===== */
+section:not(#hero) canvas {
+  display: none !important;
 }
