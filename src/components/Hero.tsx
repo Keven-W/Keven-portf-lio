@@ -12,71 +12,68 @@ const Hero = () => {
   };
 
   return (
-    <section 
-      id="hero" 
-      className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden"
-      style={{
-        // Garante que não tenha gaps
-        boxSizing: 'border-box',
-        width: '100vw',
-        left: '0',
-        right: '0'
-      }}
-    >
+    <section id="hero" className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+      {/* Binary Background - mais visível */}
       <BinaryBackground />
       
-      {/* Overlay com gradient melhorado */}
-     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/85 to-black pointer-events-none" />
+      {/* Overlay apenas nas bordas para contraste, mas deixando o centro mais visível */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40 z-10" />
       
-      {/* Adiciona bordas escuras nas extremidades para evitar linha branca */}
-      {/*<div className="absolute inset-0 border-4 border-black pointer-events-none" />*/}
-
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Gradiente nas bordas laterais para evitar linhas brancas */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30 z-10" />
+      
+      {/* Conteúdo principal */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-6 sm:mb-8"
+          className="mb-8"
         >
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="inline-block mb-4 sm:mb-6"
+            className="inline-block mb-6"
           >
-            <Code2 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-[#D4AF37]" />
+            <Code2 className="w-20 h-20 md:w-24 md:h-24 text-[#D4AF37]" />
           </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-3 sm:mb-4 px-2">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
             Keven Wendell
           </h1>
         </motion.div>
 
-        <div className="mb-8 sm:mb-12">
-          <TypingTitle />
+        <div className="mb-12 relative">
+          {/* Fundo escuro atrás do texto de digitação para melhor contraste */}
+          <div className="absolute inset-0 bg-black/30 -z-10 rounded-lg blur-sm"></div>
+          <div className="relative">
+            <TypingTitle />
+          </div>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mt-8 sm:mt-12 px-2"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center relative z-30"
         >
+          {/* Fundo dos botões para melhor contraste */}
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-xl -z-10"></div>
+          
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(212, 175, 55, 0.5)' }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollToSection('projects')}
-            className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-[#D4AF37] text-black font-bold rounded-lg hover:bg-[#C4A037] transition-colors duration-300 text-base sm:text-lg"
-            aria-label="Ver projetos"
+            className="px-8 py-4 bg-[#D4AF37] text-black font-bold rounded-lg hover:bg-[#C4A037] transition-colors duration-300 shadow-lg shadow-[#D4AF37]/20"
           >
             Ver Projetos
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(212, 175, 55, 0.5)' }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollToSection('contact')}
-            className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 border-2 border-[#D4AF37] text-[#D4AF37] font-bold rounded-lg hover:bg-[#D4AF37] hover:text-black transition-all duration-300 text-base sm:text-lg"
-            aria-label="Ir para contato"
+            className="px-8 py-4 border-2 border-[#D4AF37] text-[#D4AF37] font-bold rounded-lg hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-lg shadow-[#D4AF37]/10"
           >
             Contato
           </motion.button>
@@ -86,11 +83,13 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="mt-16 sm:mt-20"
+          className="mt-20 relative"
         >
+          {/* Fundo para a seta */}
+          <div className="absolute inset-0 bg-black/20 w-12 h-12 mx-auto rounded-full -z-10"></div>
           <motion.div
             animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
           >
             <svg
               className="w-6 h-6 mx-auto text-[#D4AF37] cursor-pointer"
@@ -98,7 +97,6 @@ const Hero = () => {
               stroke="currentColor"
               viewBox="0 0 24 24"
               onClick={() => scrollToSection('about')}
-              aria-label="Rolar para baixo"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>

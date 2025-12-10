@@ -12,68 +12,69 @@ const BinaryBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Configurações do efeito
-    const fontSize = 18;
-    const columnWidth = 20;
+    // Configurações - mais visível e rápido
+    const fontSize = 16; // Tamanho normal
+    const columnWidth = 20; // Mais denso
+    let speed = 1.2; // Mais rápido
+    let lastTime = 0;
+    const interval = 33; // 30 FPS (mais suave)
 
-    const initDrops = () => {
-      const columns = Math.floor(canvas.width / columnWidth);
-      dropsRef.current = Array(columns).fill(0);
-      
-      // Inicializa com valores aleatórios
-      for (let i = 0; i < columns; i++) {
-        dropsRef.current[i] = Math.random() * canvas.height / fontSize;
-      }
-    };
-
-    const resizeCanvas = () => {
-      // Usar window.innerWidth/Height para cobrir toda a tela
+    const initCanvas = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
       
-      // Ajustar para device pixel ratio
+      // Ajustar para high DPI displays
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      
-      ctx.scale(dpr, dpr);
-      
-      // Definir estilo
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       
-      initDrops();
+      ctx.scale(dpr, dpr);
+      
+      // Inicializar gotas
+      const columns = Math.floor(width / columnWidth);
+      dropsRef.current = new Array(columns);
+      for (let i = 0; i < columns; i++) {
+        dropsRef.current[i] = Math.random() * -50;
+      }
     };
 
-    const draw = () => {
-      // Fundo semi-transparente para efeito de rastro
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const draw = (timestamp: number) => {
+      // Controlar FPS
+      if (timestamp - lastTime < interval) {
+        animationRef.current = requestAnimationFrame(draw);
+        return;
+      }
+      lastTime = timestamp;
 
-      // Cor do texto binário
-      ctx.fillStyle = '#D4AF37';
-      ctx.font = `${fontSize}px 'Courier New', monospace`;
+      const width = canvas.width / (window.devicePixelRatio || 1);
+      const height = canvas.height / (window.devicePixelRatio || 1);
+      
+      // Fundo com opacidade para efeito de rastro (mais visível)
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Aumentada
+      ctx.fillRect(0, 0, width, height);
+
+      // Texto binário com cor mais visível
+      ctx.fillStyle = 'rgba(212, 175, 55, 0.25)'; // Mais opaco
+      ctx.font = `${fontSize}px "Courier New", monospace`;
 
       const drops = dropsRef.current;
-      const dpr = window.devicePixelRatio || 1;
       
       for (let i = 0; i < drops.length; i++) {
-        // Caractere binário aleatório
+        // Mais frequência de mudança (rápido)
         const text = Math.random() > 0.5 ? '1' : '0';
-        
-        // Posição (ajustada para DPR)
         const x = i * columnWidth;
-        const y = drops[i] * fontSize;
+        const y = drops[i];
         
-        // Desenha o caractere
         ctx.fillText(text, x, y);
-
-        // Move para baixo
-        drops[i]++;
-
-        // Reinicia quando sai da tela
-        if (y > canvas.height / dpr && Math.random() > 0.975) {
-          drops[i] = 0;
+        
+        // Mover para baixo MAIS RÁPIDO
+        drops[i] += speed;
+        
+        // Reiniciar se sair da tela
+        if (drops[i] > height + 50) {
+          drops[i] = Math.random() * -20;
         }
       }
 
@@ -81,26 +82,25 @@ const BinaryBackground = () => {
     };
 
     const startAnimation = () => {
-      resizeCanvas();
-      draw();
-    };
-
-    const handleResize = () => {
-      // Cancelar animação atual
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      // Redimensionar e reiniciar
-      resizeCanvas();
+      initCanvas();
       animationRef.current = requestAnimationFrame(draw);
     };
 
-    // Inicia a animação
+    // Iniciar
     startAnimation();
 
-    // Event listeners
+    // Redimensionamento
+    const handleResize = () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      initCanvas();
+      animationRef.current = requestAnimationFrame(draw);
+    };
+
     window.addEventListener('resize', handleResize);
 
+    // Cleanup
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -112,8 +112,7 @@ const BinaryBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full opacity-20 pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="fixed top-0 left-0 w-full h-full opacity-30 pointer-events-none"
       aria-hidden="true"
     />
   );
