@@ -12,8 +12,8 @@ const About = () => {
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      value: 'linkedin.com/in/keven-wendell',
-      href: 'https://linkedin.com/in/keven-wendell'
+      value: 'linkedin.com/in/kevenw',
+      href: 'https://linkedin.com/in/kevenw'
     },
     {
       icon: Github,

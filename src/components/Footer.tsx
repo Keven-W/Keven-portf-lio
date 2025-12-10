@@ -22,7 +22,7 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Mail, href: 'mailto:keven.w.1107@gmail.com', label: 'Email' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/keven-wendell', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/kevenw', label: 'LinkedIn' },
     { icon: Github, href: 'https://github.com/Keven-W', label: 'GitHub' }
   ];
 
