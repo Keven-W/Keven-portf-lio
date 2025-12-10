@@ -1,10 +1,15 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
     }
   };
 
@@ -25,6 +30,7 @@ const Header = () => {
             Keven Wendell
           </motion.div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {[
               { name: 'Sobre', id: 'about' },
@@ -45,24 +51,26 @@ const Header = () => {
             ))}
           </nav>
 
+          {/* Mobile Menu Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="md:hidden text-[#D4AF37]"
-            onClick={() => {
-              const nav = document.getElementById('mobile-nav');
-              nav?.classList.toggle('hidden');
-            }}
+            className="md:hidden text-[#D4AF37] p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu de navegação"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
         </div>
 
-        <div id="mobile-nav" className="hidden md:hidden pb-4">
-          <nav className="flex flex-col space-y-3">
+        {/* Mobile Menu */}
+        <motion.div
+          initial={false}
+          animate={isMenuOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="md:hidden overflow-hidden bg-black/95 backdrop-blur-lg"
+        >
+          <nav className="flex flex-col space-y-3 py-4">
             {[
               { name: 'Sobre', id: 'about' },
               { name: 'Skills', id: 'skills' },
@@ -71,18 +79,15 @@ const Header = () => {
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  scrollToSection(item.id);
-                  document.getElementById('mobile-nav')?.classList.add('hidden');
-                }}
-                className="text-white hover:text-[#D4AF37] transition-colors duration-300 text-left"
+                onClick={() => scrollToSection(item.id)}
+                className="text-white hover:text-[#D4AF37] transition-colors duration-300 text-left py-2 px-4 hover:bg-[#D4AF37]/10 rounded-lg"
                 aria-label={`Navegar para ${item.name}`}
               >
                 {item.name}
               </button>
             ))}
           </nav>
-        </div>
+        </motion.div>
       </div>
     </motion.header>
   );
