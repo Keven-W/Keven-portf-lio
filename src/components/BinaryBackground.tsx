@@ -1,9 +1,20 @@
 import { useEffect, useRef } from 'react';
 
+interface Particle {
+  x: number;
+  y: number;
+  size: number;
+  speedX: number;
+  speedY: number;
+  opacity: number;
+  layer: number;
+}
+
 const BinaryBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
-  const dropsRef = useRef<number[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -12,106 +23,121 @@ const BinaryBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Configurações ajustadas - mais lento mas visível
-    const fontSize = 16;
-    const columnWidth = 24; // Mais espaçado
-    let speed = 0.6; // Mais lento
-    let lastTime = 0;
-    const interval = 50; // 20 FPS (mais suave e lento)
-
     const initCanvas = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
-      
+
       const width = parent.clientWidth;
       const height = parent.clientHeight;
-      
-      // Ajustar para high DPI displays
+
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      
+
       ctx.scale(dpr, dpr);
-      
-      // Inicializar gotas
-      const columns = Math.floor(width / columnWidth);
-      dropsRef.current = new Array(columns);
-      for (let i = 0; i < columns; i++) {
-        dropsRef.current[i] = Math.random() * -100; // Começar mais acima
+
+      particlesRef.current = [];
+      const particleCount = Math.min(80, Math.floor((width * height) / 15000));
+
+      for (let i = 0; i < particleCount; i++) {
+        const layer = Math.random();
+        particlesRef.current.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: layer * 3 + 1,
+          speedX: (Math.random() - 0.5) * (layer * 0.3 + 0.1),
+          speedY: (Math.random() - 0.5) * (layer * 0.3 + 0.1),
+          opacity: layer * 0.4 + 0.1,
+          layer: layer
+        });
       }
     };
 
-    const draw = (timestamp: number) => {
-      // Controlar FPS
-      if (timestamp - lastTime < interval) {
-        animationRef.current = requestAnimationFrame(draw);
-        return;
-      }
-      lastTime = timestamp;
-
+    const draw = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
-      
+
       const width = parent.clientWidth;
       const height = parent.clientHeight;
-      
-      // Fundo com opacidade para efeito de rastro suave
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; // Rastro mais duradouro
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, width, height);
 
-      // Texto binário com cor suave e visível
-      ctx.fillStyle = 'rgba(212, 175, 55, 0.15)'; // Mais suave
-      ctx.font = `bold ${fontSize}px "Courier New", monospace`;
-      ctx.textAlign = 'center';
+      const particles = particlesRef.current;
 
-      const drops = dropsRef.current;
-      
-      for (let i = 0; i < drops.length; i++) {
-        // Texto binário aleatório
-        const text = Math.random() > 0.5 ? '1' : '0';
-        const x = i * columnWidth + columnWidth / 2; // Centralizado na coluna
-        const y = drops[i];
-        
-        // Desenhar o caractere
-        ctx.fillText(text, x, y);
-        
-        // Mover para baixo com velocidade variável
-        const dropSpeed = speed * (0.8 + Math.random() * 0.4);
-        drops[i] += dropSpeed;
-        
-        // Reiniciar se sair da tela
-        if (drops[i] > height + 100) {
-          drops[i] = Math.random() * -50;
-        }
-        
-        // Ocasionalmente resetar uma gota aleatória
-        if (Math.random() < 0.001) {
-          drops[i] = Math.random() * -50;
-        }
-      }
+      particles.forEach((particle, i) => {
+        const parallaxX = (mouseRef.current.x - width / 2) * particle.layer * 0.02;
+        const parallaxY = (mouseRef.current.y - height / 2) * particle.layer * 0.02;
 
-      // Desenhar algumas partículas especiais
-      if (Math.random() < 0.03) {
-        const specialX = Math.random() * width;
-        const specialY = Math.random() * height;
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
-        ctx.fillText('1', specialX, specialY);
-      }
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+
+        if (particle.x < -50) particle.x = width + 50;
+        if (particle.x > width + 50) particle.x = -50;
+        if (particle.y < -50) particle.y = height + 50;
+        if (particle.y > height + 50) particle.y = -50;
+
+        const gradient = ctx.createRadialGradient(
+          particle.x + parallaxX,
+          particle.y + parallaxY,
+          0,
+          particle.x + parallaxX,
+          particle.y + parallaxY,
+          particle.size * 3
+        );
+
+        gradient.addColorStop(0, `rgba(212, 175, 55, ${particle.opacity * 0.8})`);
+        gradient.addColorStop(0.5, `rgba(212, 175, 55, ${particle.opacity * 0.4})`);
+        gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(
+          particle.x + parallaxX,
+          particle.y + parallaxY,
+          particle.size * 3,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+
+        particles.forEach((otherParticle, j) => {
+          if (i === j) return;
+
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            const opacity = (1 - distance / 150) * Math.min(particle.opacity, otherParticle.opacity) * 0.15;
+            ctx.strokeStyle = `rgba(212, 175, 55, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particle.x + parallaxX, particle.y + parallaxY);
+            ctx.lineTo(otherParticle.x + parallaxX, otherParticle.y + parallaxY);
+            ctx.stroke();
+          }
+        });
+      });
 
       animationRef.current = requestAnimationFrame(draw);
     };
 
-    const startAnimation = () => {
-      initCanvas();
-      animationRef.current = requestAnimationFrame(draw);
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
     };
 
-    // Iniciar animação
-    startAnimation();
+    initCanvas();
+    animationRef.current = requestAnimationFrame(draw);
 
-    // Observar redimensionamento do container
+    window.addEventListener('mousemove', handleMouseMove);
+
     const resizeObserver = new ResizeObserver(() => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -125,7 +151,6 @@ const BinaryBackground = () => {
       resizeObserver.observe(parent);
     }
 
-    // Redimensionamento da janela
     const handleResize = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -136,7 +161,6 @@ const BinaryBackground = () => {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -145,6 +169,7 @@ const BinaryBackground = () => {
         resizeObserver.unobserve(parent);
       }
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 

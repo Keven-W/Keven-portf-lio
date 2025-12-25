@@ -34,9 +34,13 @@ const TypingTitle = () => {
   }, [text, isDeleting, loopNum, typingSpeed, phrases]);
 
   return (
-    <div className="text-3xl md:text-5xl font-bold text-white mb-8 h-20 flex items-center justify-center">
-      <span className="text-[#D4AF37]">{text}</span>
-      <span className="animate-pulse text-[#D4AF37]">|</span>
+    <div className="text-3xl md:text-5xl font-bold mb-8 h-20 flex items-center justify-center px-4">
+      <span className="text-[#D4AF37] drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+        {text}
+      </span>
+      <span className="animate-pulse text-[#D4AF37] drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+        |
+      </span>
     </div>
   );
 };
