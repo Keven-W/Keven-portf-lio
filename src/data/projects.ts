@@ -12,12 +12,12 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: 'Website para Clínica Odontológica',
+    title: 'Website para Clínica de Protése Dentária',
     description: 'Sistema completo para gestão de clínica odontológica com agendamento online, cadastro de pacientes e área administrativa.',
     technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
     status: 'in-progress',
     statusText: 'Em Desenvolvimento',
-    image: 'https://images.pexels.com/photos/3779706/pexels-photo-3779706.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: '',
     github: 'https://github.com/Keven-W/Keven-portf-lio',
     highlights: [
       'Sistema de Agendamento',

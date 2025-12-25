@@ -27,7 +27,7 @@ const Header = () => {
             className="text-2xl font-bold text-[#D4AF37] cursor-pointer"
             onClick={() => scrollToSection('hero')}
           >
-            Keven Wendell
+            Portfólio.
           </motion.div>
 
           {/* Desktop Navigation */}

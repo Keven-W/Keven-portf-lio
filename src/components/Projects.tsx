@@ -30,6 +30,7 @@ const Projects = () => {
               whileHover={{ y: -10 }}
               className="bg-gradient-to-br from-gray-900 to-black border border-[#D4AF37]/30 rounded-xl overflow-hidden hover:border-[#D4AF37] transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.3)]"
             >
+              
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={project.image}
