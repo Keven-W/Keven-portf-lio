@@ -17,7 +17,7 @@ export const projects: Project[] = [
     technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL'],
     status: 'in-progress',
     statusText: 'Em Desenvolvimento',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-4.0.0&auto=format&fit=crop&w=800',
     github: 'https://github.com/Keven-W/Keven-portf-lio',
     highlights: [
       'Sistema de Agendamento',
