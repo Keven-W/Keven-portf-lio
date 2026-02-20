@@ -26,34 +26,7 @@ const Hero = () => {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-8"
         >
-          <motion.div
-            animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-            transition={{
-              rotate: { duration: 8, repeat: Infinity, ease: 'linear' },
-              scale: { duration: 3, repeat: Infinity, ease: 'easeInOut' }
-            }}
-            className=" mb-8 w-20 h-20 md:w-24 md:h-24 flex items-center justify-center"
-          >
-            <div className="relative w-full h-full">
-              <motion.div
-                animate={{ opacity: [0.4, 0.8, 0.4] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#D4AF37]/40 via-[#D4AF37]/20 to-transparent blur-2xl"
-              />
-              <motion.div
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute inset-0 rounded-full border-2 border-[#D4AF37]/40 shadow-[inset_0_0_20px_rgba(212,175,55,0.3)]"
-              />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#D4AF37]/30 to-transparent backdrop-blur-sm" />
-              <motion.div
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute inset-2 rounded-full shadow-[0_0_40px_rgba(212,175,55,0.5),_inset_0_0_40px_rgba(212,175,55,0.2)]"
-              />
-              <div className="absolute inset-6 rounded-full bg-black shadow-[inset_0_0_30px_rgba(0,0,0,0.8)]" />
-            </div>
-          </motion.div>
+          
 
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
             Keven Wendell
